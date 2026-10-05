@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <div
+            class="flex justify-center h-screen bg-teal-100 bg-[url('https://i.pinimg.com/originals/2c/41/a9/2c41a976237959036dea727eaf9f38d6.gif')] bg-cover bg-center">
+            <div class="flex flex-col justify-center items-center">
+                <div class="text-center">
+                    <h1 class="text-5xl font-mono font-bold text-emerald-800 pb-5">TIC-TOC-TOE</h1>
+                    <p id="message" class="text-xl font-sans font-bold text-emerald-800 pb-2">{{message}}</p>
+                </div>
+
+                <div>
+                    <div class="grid grid-cols-3 p-3 shadow-xl rounded-xl bg-yellow-200">
+                        <div v-for="(row, rowIndex) in boardcells" :key="rowIndex">
+                            <div v-for="(cell, colIndex) in row" :key="colIndex"
+                                class="w-30 h-30 bg-yellow-500 rounded-xl m-1 hover:bg-yellow-600 hover:duration-200 flex items-center justify-center text-7xl font-bold"
+                                @click="cellclicked(rowIndex, colIndex)" :class="{'text-red-500':cell === 'X',
+                                        'text-blue-500':cell === 'O',
+                                        'cursor-not-allowed': cell !== '' || winner}">
+                                {{cell}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button @click="RestartGame"
+                    class="bg-yellow-400 px-3 py-2 rounded-xl font-sans font-bold text-emerald-800 m-5">Restart</button>
+            </div>
+
+        </div>
+    </div>
+    </div>
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+
+                    boardcells: [
+                        ["", "", ""],
+                        ["", "", ""],
+                        ["", "", ""]
+                    ],
+                    currentPlayer: 'X',
+                    message: "Let's start",
+                    winner: null
+
+                }
+            },
+            methods: {
+                cellclicked(row, col) {
+                    if (this.boardcells[row][col] !== "" || this.winner) {
+                        return;
+                    }
+
+                    this.boardcells[row][col] = this.currentPlayer;
+
+                    if (this.isWinner(this.currentPlayer)) {
+                        this.winner = this.currentPlayer;
+                        this.message = `Player ${this.winner} win!`;
+
+                    }
+                    else if (this.isDraw(this.currentPlayer)) {
+                        this.message = `Draw!`;
+                    }
+                    else {
+                        this.currentPlayer = this.currentPlayer === 'X' ? 'O' : 'X';
+                        this.message = `Player ${this.currentPlayer}'s turn`;
+                    }
+
+                },
+
+                isWinner(user) {
+                    // row
+                    for (let row = 0; row < this.boardcells.length; row++) {
+                        if (this.boardcells[row][0] == user
+                            && this.boardcells[row][1] == user
+                            && this.boardcells[row][2] == user) {
+                            return true;
+                        }
+                    }
+                    // col
+                    for (let col = 0; col < this.boardcells.length; col++) {
+                        if (this.boardcells[0][col] == user
+                            && this.boardcells[1][col] == user
+                            && this.boardcells[2][col] == user) {
+                            return true;
+                        }
+                    }
+                    // diagonal
+                    if (this.boardcells[0][0] == user
+                        && this.boardcells[1][1] == user
+                        && this.boardcells[2][2] == user) {
+                        return true;
+
+                    } if (this.boardcells[0][2] == user
+                        && this.boardcells[1][1] == user
+                        && this.boardcells[2][0] == user) {
+
+                    }
+                    return false;
+
+                },
+
+                RestartGame() {
+                    this.boardcells = [
+                        ["", "", ""],
+                        ["", "", ""],
+                        ["", "", ""]
+                    ];
+                    this.currentPlayer = 'X';
+                    this.winner = null;
+                    this.message = "Let's start again!";
+                },
+
+                isDraw() {
+                    for (let row = 0; row < 3; row++) {
+                        for (let col = 0; col < 3; col++) {
+                            if (this.boardcells[row][col] === "") {
+                                return false;
+                            }
+                        }
+                    }
+                    return true;
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+
+</html>
