@@ -50,10 +50,10 @@
                     </div>
 
                     <div class="w-full">
-                        <div class="grid grid-cols-3 p-3 shadow-xl rounded-xl bg-yellow-200">
+                        <div class="grid grid-cols-3 p-2 shadow-xl rounded-xl bg-yellow-200">
                             <div v-for="(row, rowIndex) in boardcells" :key="rowIndex">
                                 <div v-for="(cell, colIndex) in row" :key="colIndex"
-                                    class="w-30 h-30 bg-yellow-500 rounded-xl m-1 hover:bg-yellow-600 hover:duration-200 flex items-center justify-center text-7xl font-bold"
+                                    class="w-20 h-20 bg-yellow-500 rounded-xl m-1 hover:bg-yellow-600 hover:duration-200 flex items-center justify-center text-7xl font-bold"
                                     @click="cellclicked(rowIndex, colIndex)" :class="{'text-red-500':cell === 'X',
                                         'text-blue-500':cell === 'O',
                                         'cursor-not-allowed': cell !== '' || winner}">
